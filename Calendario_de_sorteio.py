@@ -41,7 +41,7 @@ def verificar_sorteios(sorteios, dia, mes, ano):
                 produtos.append(f"{sorteio['produto']} (Modalidade: {sorteio['mod']})")
             elif sorteio["freq"] == "Primeira semana" and dia <= 7:
                 produtos.append(f"{sorteio['produto']} (Modalidade: {sorteio['mod']})")
-            elif sorteio["freq"] == "Última semana" and dia > calendar.monthrange(ano, mes)[1] - 7:
+            elif sorteio["freq"] == "Ultima semana" and dia > calendar.monthrange(ano, mes)[1] - 7:
                 produtos.append(f"{sorteio['produto']} (Modalidade: {sorteio['mod']})")
     return produtos
 

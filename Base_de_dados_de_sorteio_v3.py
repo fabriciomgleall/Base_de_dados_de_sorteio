@@ -9,6 +9,9 @@ dbf_file = "Base_de_dados_de_sorteio/base_de_dados_de_sorteio.dbf"
 def criar_arquivo_dbf():
     if not os.path.exists(dbf_file):
         try:
+            # Criar o diretório se não existir
+            os.makedirs(os.path.dirname(dbf_file), exist_ok=True)
+            
             # Criar o arquivo com a estrutura necessária
             table = dbf.Table(
                 dbf_file,
@@ -25,11 +28,9 @@ def criar_arquivo_dbf():
 # Função para adicionar dados ao DBF
 def adicionar_dados():
     try:
-        # Abrir o arquivo DBF
         table = dbf.Table(dbf_file)
         table.open(mode=dbf.READ_WRITE)
 
-        # Obter valores da interface
         produto = produto_entry.get()
         mod = int(modalidade_entry.get())
         qtd = int(quantidade_entry.get())
@@ -38,15 +39,17 @@ def adicionar_dados():
         mes = mes_sorteio_combobox.get()
         freq = frequencia_combobox.get()
 
-        # Validar dados
         if not produto or not mod or not qtd or not mult or not dias or not mes or not freq:
             raise ValueError("Todos os campos são obrigatórios!")
 
-        # Adicionar registro ao DBF
-        table.append((produto, mod, qtd, mult, dias, mes, freq))
+        if mes == "All":
+            for m in meses_opcoes:
+                table.append((produto, mod, qtd, mult, dias, m, freq))
+        else:
+            table.append((produto, mod, qtd, mult, dias, mes, freq))
+   
         table.close()
 
-        # Limpar os campos e exibir mensagem de sucesso
         produto_entry.delete(0, 'end')
         modalidade_entry.delete(0, 'end')
         quantidade_entry.delete(0, 'end')
@@ -60,14 +63,10 @@ def adicionar_dados():
     except Exception as e:
         messagebox.showerror("Erro", f"Erro ao adicionar dados: {e}")
 
-# Criar arquivo DBF, caso não exista
-criar_arquivo_dbf()
-
-# Interface gráfica para adicionar dados
+# Configuração da interface gráfica
 root = Tk()
-root.title("Cadastro de Sorteios (DBF)")
+root.title("Cadastro de Sorteios")
 
-# Campos do formulário
 Label(root, text="Produto:").grid(row=0, column=0, padx=10, pady=5, sticky="e")
 produto_entry = Entry(root)
 produto_entry.grid(row=0, column=1, padx=10, pady=5)
@@ -90,17 +89,18 @@ dias_sorteio_combobox = ttk.Combobox(root, values=dias_opcoes, state="readonly")
 dias_sorteio_combobox.grid(row=4, column=1, padx=10, pady=5)
 
 Label(root, text="Mês do Sorteio:").grid(row=5, column=0, padx=10, pady=5, sticky="e")
-meses_opcoes = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+meses_opcoes = ["All", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 mes_sorteio_combobox = ttk.Combobox(root, values=meses_opcoes, state="readonly")
 mes_sorteio_combobox.grid(row=5, column=1, padx=10, pady=5)
 
 Label(root, text="Frequência:").grid(row=6, column=0, padx=10, pady=5, sticky="e")
-frequencia_opcoes = ["Todas as semanas", "Primeira semana", "Última semana"]
+frequencia_opcoes = ["Todas as semanas", "Primeira semana", "Ultima semana"]
 frequencia_combobox = ttk.Combobox(root, values=frequencia_opcoes, state="readonly")
 frequencia_combobox.grid(row=6, column=1, padx=10, pady=5)
 
-# Botão para adicionar dados
 Button(root, text="Adicionar Sorteio", command=adicionar_dados).grid(row=7, column=0, columnspan=2, pady=10)
 
-# Iniciar a interface
+# Criar o arquivo DBF se não existir
+criar_arquivo_dbf()
+
 root.mainloop()
