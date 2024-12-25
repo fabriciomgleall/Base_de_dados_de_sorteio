@@ -43,7 +43,7 @@ def adicionar_dados():
             raise ValueError("Todos os campos são obrigatórios!")
 
         if mes == "All":
-            for m in meses_opcoes:
+            for m in ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]:
                 table.append((produto, mod, qtd, mult, dias, m, freq))
         elif mes == "Sem":
             for m in ["May","Nov"]:
