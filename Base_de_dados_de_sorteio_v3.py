@@ -1,6 +1,7 @@
 import os
 import dbf
 from tkinter import Tk, Label, Entry, Button, messagebox, ttk
+from customtkinter import *
 
 # Configuração do arquivo DBF
 dbf_file = "Base_de_dados_de_sorteio/base_de_dados_de_sorteio.dbf"
@@ -67,41 +68,37 @@ def adicionar_dados():
         messagebox.showerror("Erro", f"Erro ao adicionar dados: {e}")
 
 # Configuração da interface gráfica
-root = Tk()
+root = CTk()
+root.geometry("350x330")
 root.title("Cadastro de Sorteios")
 
-Label(root, text="Produto:").grid(row=0, column=0, padx=10, pady=5, sticky="e")
-produto_entry = Entry(root)
-produto_entry.grid(row=0, column=1, padx=10, pady=5)
+set_appearance_mode("dark")
 
-Label(root, text="Modalidade:").grid(row=1, column=0, padx=10, pady=5, sticky="e")
-modalidade_entry = Entry(root)
-modalidade_entry.grid(row=1, column=1, padx=10, pady=5)
+CTkLabel(root, text="Produto:", font=("Arial", 14)).grid(row=0, column=0, padx=10, pady=5, sticky="e")
+produto_entry = CTkEntry(root).grid(row=0, column=1, padx=10, pady=5)
 
-Label(root, text="Quantidade:").grid(row=2, column=0, padx=10, pady=5, sticky="e")
-quantidade_entry = Entry(root)
-quantidade_entry.grid(row=2, column=1, padx=10, pady=5)
+CTkLabel(root, text="Modalidade:", font=("Arial", 14)).grid(row=1, column=0, padx=10, pady=5, sticky="e")
+modalidade_entry = CTkEntry(root).grid(row=1, column=1, padx=10, pady=5)
 
-Label(root, text="Múltiplo:").grid(row=3, column=0, padx=10, pady=5, sticky="e")
-multiplo_entry = Entry(root)
-multiplo_entry.grid(row=3, column=1, padx=10, pady=5)
+CTkLabel(root, text="Quantidade:", font=("Arial", 14)).grid(row=2, column=0, padx=10, pady=5, sticky="e")
+quantidade_entry = CTkEntry(root).grid(row=2, column=1, padx=10, pady=5)
 
-Label(root, text="Dia(s) do Sorteio:").grid(row=4, column=0, padx=10, pady=5, sticky="e")
+CTkLabel(root, text="Múltiplo:", font=("Arial", 14)).grid(row=3, column=0, padx=10, pady=5, sticky="e")
+multiplo_entry = CTkEntry(root).grid(row=3, column=1, padx=10, pady=5)
+
+CTkLabel(root, text="Dia(s) do Sorteio:", font=("Arial", 14)).grid(row=4, column=0, padx=10, pady=5, sticky="e")
 dias_opcoes = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-dias_sorteio_combobox = ttk.Combobox(root, values=dias_opcoes, state="readonly")
-dias_sorteio_combobox.grid(row=4, column=1, padx=10, pady=5)
+dias_sorteio_combobox = CTkComboBox(root, values=dias_opcoes, state="readonly").grid(row=4, column=1, padx=10, pady=5)
 
-Label(root, text="Mês do Sorteio:").grid(row=5, column=0, padx=10, pady=5, sticky="e")
+CTkLabel(root, text="Mês do Sorteio:", font=("Arial", 14)).grid(row=5, column=0, padx=10, pady=5, sticky="e")
 meses_opcoes = ["All","Sem", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-mes_sorteio_combobox = ttk.Combobox(root, values=meses_opcoes, state="readonly")
-mes_sorteio_combobox.grid(row=5, column=1, padx=10, pady=5)
+mes_sorteio_combobox = CTkComboBox(root, values=meses_opcoes, state="readonly").grid(row=5, column=1, padx=10, pady=5)
 
-Label(root, text="Frequência:").grid(row=6, column=0, padx=10, pady=5, sticky="e")
+CTkLabel(root, text="Frequência:", font=("Arial", 14)).grid(row=6, column=0, padx=10, pady=5, sticky="e")
 frequencia_opcoes = ["Todas as semanas", "Primeira semana", "Ultima semana"]
-frequencia_combobox = ttk.Combobox(root, values=frequencia_opcoes, state="readonly")
-frequencia_combobox.grid(row=6, column=1, padx=10, pady=5)
+frequencia_combobox = CTkComboBox(root, values=frequencia_opcoes, state="readonly").grid(row=6, column=1, padx=10, pady=5)
 
-Button(root, text="Adicionar Sorteio", command=adicionar_dados).grid(row=7, column=0, columnspan=2, pady=10)
+btn = CTkButton(master=root, text="Adicionar Sorteio", command=adicionar_dados, corner_radius=32, fg_color="#132ceb", hover_color="#9413eb").place(relx=0.5, rely=0.9, anchor="center")
 
 # Criar o arquivo DBF se não existir
 criar_arquivo_dbf()
