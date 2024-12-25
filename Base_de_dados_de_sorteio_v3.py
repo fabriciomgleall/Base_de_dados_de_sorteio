@@ -45,6 +45,9 @@ def adicionar_dados():
         if mes == "All":
             for m in meses_opcoes:
                 table.append((produto, mod, qtd, mult, dias, m, freq))
+        elif mes == "Sem":
+            for m in ["May","Nov"]:
+                table.append((produto, mod, qtd, mult, dias, m, freq))
         else:
             table.append((produto, mod, qtd, mult, dias, mes, freq))
    
@@ -89,7 +92,7 @@ dias_sorteio_combobox = ttk.Combobox(root, values=dias_opcoes, state="readonly")
 dias_sorteio_combobox.grid(row=4, column=1, padx=10, pady=5)
 
 Label(root, text="Mês do Sorteio:").grid(row=5, column=0, padx=10, pady=5, sticky="e")
-meses_opcoes = ["All", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+meses_opcoes = ["All","Sem", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 mes_sorteio_combobox = ttk.Combobox(root, values=meses_opcoes, state="readonly")
 mes_sorteio_combobox.grid(row=5, column=1, padx=10, pady=5)
 
