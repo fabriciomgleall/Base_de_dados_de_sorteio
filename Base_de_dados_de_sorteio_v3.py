@@ -85,7 +85,7 @@ multiplo_entry = Entry(root)
 multiplo_entry.grid(row=3, column=1, padx=10, pady=5)
 
 Label(root, text="Dia(s) do Sorteio:").grid(row=4, column=0, padx=10, pady=5, sticky="e")
-dias_opcoes = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"]
+dias_opcoes = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 dias_sorteio_combobox = ttk.Combobox(root, values=dias_opcoes, state="readonly")
 dias_sorteio_combobox.grid(row=4, column=1, padx=10, pady=5)
 

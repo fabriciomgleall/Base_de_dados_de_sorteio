@@ -4,8 +4,10 @@ from tkinter import Tk, Label, Button, Frame, messagebox
 from tkinter.ttk import Combobox
 from datetime import datetime
 
+
 # Configuração do arquivo DBF
-dbf_file = "Base_de_dados_de_sorteio/sorteios.dbf"
+dbf_file = "Base_de_dados_de_sorteio/base_de_dados_de_sorteio.dbf"
+
 
 # Função para carregar os sorteios do arquivo DBF
 def carregar_sorteios():
@@ -27,20 +29,33 @@ def carregar_sorteios():
         messagebox.showerror("Erro", f"Erro ao carregar sorteios: {e}")
         return []
 
+
 # Função para verificar sorteios em um dia específico
 def verificar_sorteios(sorteios, dia, mes, ano):
-    dia_semana = calendar.day_name[datetime(ano, mes, dia).weekday()][:3]
-    mes_abrev = calendar.month_abbr[mes][:3]
+    dia_semana = calendar.day_abbr[datetime(ano, mes, dia).weekday()]  # Dia da semana abreviado
+    mes_abrev = calendar.month_abbr[mes][:3]  # Mês abreviado
     produtos = []
     for sorteio in sorteios:
-        if sorteio["mes"] == mes_abrev and dia_semana in sorteio["dias"]:
+        if sorteio["mes"] == mes_abrev and dia_semana in sorteio["dias"]:  # Verifica mês e dia da semana
             if sorteio["freq"] == "Todas as semanas":
-                produtos.append(sorteio["produto"])
+                produtos.append(f"{sorteio['produto']} (Modalidade: {sorteio['mod']})")
             elif sorteio["freq"] == "Primeira semana" and dia <= 7:
-                produtos.append(sorteio["produto"])
+                produtos.append(f"{sorteio['produto']} (Modalidade: {sorteio['mod']})")
             elif sorteio["freq"] == "Última semana" and dia > calendar.monthrange(ano, mes)[1] - 7:
-                produtos.append(sorteio["produto"])
+                produtos.append(f"{sorteio['produto']} (Modalidade: {sorteio['mod']})")
     return produtos
+
+
+# Função para exibir sorteios de um dia específico
+def exibir_sorteios(dia, mes, ano):
+    sorteios = carregar_sorteios()
+    produtos = verificar_sorteios(sorteios, dia, mes, ano)
+    if produtos:
+        sorteios_str = "\n".join(produtos)
+        messagebox.showinfo("Sorteios", f"Sorteios em {dia}/{mes}/{ano}:\n{sorteios_str}")
+    else:
+        messagebox.showinfo("Sorteios", f"Não há sorteios em {dia}/{mes}/{ano}.")
+
 
 # Função para desenhar o calendário
 def desenhar_calendario(ano, mes):
@@ -56,17 +71,17 @@ def desenhar_calendario(ano, mes):
 
     # Dias do mês
     dia_inicio, dias_no_mes = calendar.monthrange(ano, mes)
-    sorteios = carregar_sorteios()
     linha = 2
     coluna = dia_inicio
     for dia in range(1, dias_no_mes + 1):
-        produtos = verificar_sorteios(sorteios, dia, mes, ano)
-        texto = f"{dia}\n" + ("\n".join(produtos) if produtos else "")
-        Label(calendario_frame, text=texto, font=("Helvetica", 10), relief="groove", width=12, height=4).grid(row=linha, column=coluna, padx=2, pady=2)
+        btn = Button(calendario_frame, text=str(dia), font=("Helvetica", 10),
+                     command=lambda d=dia: exibir_sorteios(d, mes, ano))
+        btn.grid(row=linha, column=coluna, padx=2, pady=2, sticky="nsew")
         coluna += 1
         if coluna == 7:
             coluna = 0
             linha += 1
+
 
 # Funções para navegação
 def mes_anterior():
@@ -77,6 +92,7 @@ def mes_anterior():
         ano_atual -= 1
     desenhar_calendario(ano_atual, mes_atual)
 
+
 def mes_posterior():
     global ano_atual, mes_atual
     mes_atual += 1
@@ -84,6 +100,7 @@ def mes_posterior():
         mes_atual = 1
         ano_atual += 1
     desenhar_calendario(ano_atual, mes_atual)
+
 
 # Configuração da janela principal
 root = Tk()
